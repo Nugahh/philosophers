@@ -6,7 +6,7 @@
 /*   By: fwong <fwong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 17:00:52 by fwong             #+#    #+#             */
-/*   Updated: 2022/05/31 19:08:18 by fwong            ###   ########.fr       */
+/*   Updated: 2023/01/29 01:28:50 by fwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stddef.h>
+# include <limits.h>
 
 typedef struct s_list
 {
@@ -30,7 +31,7 @@ void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_isalnum(int c);
 int		ft_isalpha(int c);
 int		ft_isascii(int c);
-int		ft_isdigit(int c);
+int		ft_isdigit(char *str);
 int		ft_isprint(int c);
 int		ft_toupper(int c);
 int		ft_tolower(int c);

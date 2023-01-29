@@ -12,31 +12,47 @@
 
 #include "philo.h"
 
-void	ft_check_args(char **argv)
+void	ft_actions(t_philo *philo)
 {
-	int	i;
+	if (!ft_check_death(philo) && !ft_check_max_meals(philo))
+		ft_eat(philo);
+	if (!ft_check_death(philo) && !ft_check_max_meals(philo))
+		ft_sleep(philo, philo->input->time_to_sleep * 1000);
+	if (!ft_check_death(philo) && !ft_check_max_meals(philo))
+		ft_think(philo);
+	usleep(500);
+}
 
-	i = 1;
-	if (!(ac == 5 || ac == 6))
+void	*ft_routine(t_philo *philo)
+{
+	if (philo->input->total_philo == 1)
 	{
-		printf(RED "Only input: - number of philosophers\n");
-		printf(RED "			- time to die/eat/sleep\n");
-		printf(RED "			- (optionally) number of meals\n");
-		return (1);
+		ft_write_status(philo, FORK);
+		pthread_mutex_lock(philo->input->check_death);
+		philo->input->died = 1;
+		pthread_mutex_unlock(philo->input->check_death);
+		usleep(philo->input->time_to_die * 1000);
+		ft_write_status(philo, DIED);
+		return (0);
 	}
-	while (argv[i])
-	{
-		if (!(ft_atoi(argv[1]) || ft_isdigit(argv[1])))
-		{
-			printf(RED "Invalid options, only put numbers please\n");
-			return (1);
-		}
-		else if (ft_atoi(argv[1]) < 0)
-		{
-			printf(RED "Input positive numbers and at least 1 philosopher\n");
-			return (1);
-		}
-		i++
-	}
+	else if ((philo->input->total_philo % 2 == 0) && (philo->philo_id % 2 != 0))
+		ft_usleep(philo, philo->input->time_to_eat * 1000);
+	while (!ft_check_death(philo) && !ft_check_max_meals(philo))
+		ft_actions(philo);
 	return (0);
+}
+
+int	main(int argc, char **argv)
+{
+	t_input	input;
+	t_philo	*philo;
+
+	if (!ft_check_args(argc, argv))
+		return (0);
+	philo = init_philo_struct(&input);
+	if (!philo)
+		return (ft_destroy(&input), 0);
+	if (init_threads(&input, philo))
+		return (0);
+	return (ft_destroy(&input), free(philo), 0); 
 }

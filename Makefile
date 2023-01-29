@@ -5,12 +5,12 @@
 #                                                     +:+ +:+         +:+      #
 #    By: fwong <fwong@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/05/25 15:53:23 by fwong             #+#    #+#              #
-#    Updated: 2022/07/25 01:37:48 by fwong            ###   ########.fr        #
+#    Created: 2023/01/29 01:14:57 by fwong             #+#    #+#              #
+#    Updated: 2023/01/29 01:14:57 by fwong            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	=	pipex
+NAME	=	philo
 
 CC		=	clang
 
@@ -18,9 +18,12 @@ CFLAGS	=	-Wall -Wextra -Werror -pthread -MMD -MP -I ./includes -g3
 
 LIB		=	-Llibft/ -lft
 
-SRCS	= 	parsing.c	\
-			utils.c		\
-			find_cmd.c	\
+SRCS	= 	fork.c		\
+			init.c		\
+			main.c		\
+			output.c	\
+			parsing.c	\
+			utils.c
 
 OBJS	:=	${addprefix ./objs/,${SRCS:%.c=%.o}}
 

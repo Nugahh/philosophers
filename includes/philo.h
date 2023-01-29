@@ -24,6 +24,7 @@
 # include <sys/time.h>
 # include <pthread.h>
 # include <stddef.h>
+#include <stdbool.h>
 
 # include <stdatomic.h>
 
@@ -45,28 +46,70 @@
 
 typedef struct s_input
 {
-	int	nb_philo;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	max_meals;
+	int				total_philo;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				max_meals;
+	int				died;
+	long			start_time;
+	pthread_mutex_t	*fork;
+	pthread_mutex_t	*print;
+	pthread_mutex_t	*check_latest_meal;
+	pthread_mutex_t	*check_max_meals;
+	pthread_mutex_t	*check_death;
 }	t_input;
 
 typedef struct s_philo
 {
 	int					philo_id;
 	int					nb_meals;
-	int					last_meal;
-	int					is_eating;
-	int					is_dead;
-	long				start_time;
-	pthread_t			philo;
-	int					*left_fork;
-	int					*right_fork;
-	pthread_mutex_t		*left_fork;
-	pthread_mutex_t		*right_fork;
-	pthread_mutex_t		*print;
-	pthread_mutex_t		*death;
-	pthread_mutex_t		*lock;
-	t_input				input;
+	int					latest_meal;
+	pthread_t			philo_thread;
+	t_input				*input;
 }	t_philo;
+
+typedef enum e_status
+{
+	DIED,
+	THINKING,
+	EATING,
+	SLEEPING,
+	FORK
+}	t_status;
+
+// ========================================================================= //
+//                                   Prototypes                              //
+// ========================================================================= //
+
+// fork.c
+void	ft_take_fork(t_philo *philo);
+void	ft_put_fork(t_philo *philo);
+
+// init.c
+bool	init_input_struct(t_input *input, int argc, char **argv);
+bool	init_mutexes(t_input *input);
+t_philo	*init_philo_struct(t_input *input);
+bool	init_threads(t_input *input, t_philo *philo);
+
+// main.c
+void	ft_actions(t_philo *philo);
+void	*ft_routine(t_philo *philo);
+
+// output.c
+void	ft_write_status(t_philo *philo, t_status status);
+void	ft_think(t_philo *philo);
+void	ft_eat(t_philo *philo);
+void	ft_sleep(t_philo *philo, long long tts);
+
+// parsing.c
+bool	ft_check_args(int argc, char **argv);
+
+// utils.c
+time_t	get_time_in_ms(void);
+void	ft_destroy(t_input *input);
+bool	ft_check_max_meals(t_philo *philo);
+bool	ft_check_death(t_philo *philo);
+void	ft_usleep(t_philo *philo, long long tts);
+
+#endif

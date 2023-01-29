@@ -39,6 +39,8 @@ int	ft_atoi(const char *str)
 		nb = (nb * 10) + str[i] - '0';
 		i++;
 	}
+	if (nb > INT_MAX)
+		return (-1);
 	return (nb * neg);
 }
 /* 
