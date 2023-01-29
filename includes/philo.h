@@ -24,11 +24,8 @@
 # include <sys/time.h>
 # include <pthread.h>
 # include <stddef.h>
-#include <stdbool.h>
-
-# include <stdatomic.h>
-
-# include "../libft/libft.h"
+# include <stdbool.h>
+# include <limits.h>
 
 // ========================================================================= //
 //                                   Colors                                  //
@@ -38,6 +35,7 @@
 # define BLUE "\033[0;34m"
 # define BOLDGREEN "\e[0;32m"
 # define MAGENTA "\e[0;35m"
+# define YELLOW "\033[93m"
 # define END "\033[0m"
 
 // ========================================================================= //
@@ -54,19 +52,19 @@ typedef struct s_input
 	int				died;
 	long			start_time;
 	pthread_mutex_t	*fork;
-	pthread_mutex_t	*print;
-	pthread_mutex_t	*check_latest_meal;
-	pthread_mutex_t	*check_max_meals;
-	pthread_mutex_t	*check_death;
+	pthread_mutex_t	print;
+	pthread_mutex_t	check_latest_meal;
+	pthread_mutex_t	check_max_meals;
+	pthread_mutex_t	check_death;
 }	t_input;
 
 typedef struct s_philo
 {
 	int					philo_id;
 	int					nb_meals;
-	int					latest_meal;
+	long				latest_meal;
 	pthread_t			philo_thread;
-	t_input				*input;
+	struct s_input		*input;
 }	t_philo;
 
 typedef enum e_status
@@ -101,8 +99,11 @@ void	ft_write_status(t_philo *philo, t_status status);
 void	ft_think(t_philo *philo);
 void	ft_eat(t_philo *philo);
 void	ft_sleep(t_philo *philo, long long tts);
+void	ft_death(t_input *input, t_philo *philo);
 
 // parsing.c
+int		ft_isdigit(char *str);
+int		ft_atoi(const char *str);
 bool	ft_check_args(int argc, char **argv);
 
 // utils.c

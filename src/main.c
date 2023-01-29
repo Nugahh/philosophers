@@ -28,16 +28,24 @@ void	*ft_routine(t_philo *philo)
 	if (philo->input->total_philo == 1)
 	{
 		ft_write_status(philo, FORK);
-		pthread_mutex_lock(philo->input->check_death);
+		pthread_mutex_lock(&philo->input->check_death);
 		philo->input->died = 1;
-		pthread_mutex_unlock(philo->input->check_death);
+		pthread_mutex_unlock(&philo->input->check_death);
 		usleep(philo->input->time_to_die * 1000);
 		ft_write_status(philo, DIED);
 		return (0);
 	}
-	else if ((philo->input->total_philo % 2 == 0) && (philo->philo_id % 2 != 0))
+	if (philo->input->total_philo % 2)
+	{
+		if (philo->philo_id == philo->input->total_philo)
+			ft_usleep(philo, (philo->input->time_to_eat * 1000) * 2);
+		else if (philo->philo_id % 2)
+			ft_usleep(philo, philo->input->time_to_eat * 1000);
+	}
+	else if (!(philo->input->total_philo % 2) && (philo->philo_id % 2))
 		ft_usleep(philo, philo->input->time_to_eat * 1000);
-	while (!ft_check_death(philo) && !ft_check_max_meals(philo))
+	while (!ft_check_death(philo)
+		&& !ft_check_max_meals(philo - (philo->philo_id - 1)))
 		ft_actions(philo);
 	return (0);
 }
@@ -47,12 +55,14 @@ int	main(int argc, char **argv)
 	t_input	input;
 	t_philo	*philo;
 
-	if (!ft_check_args(argc, argv))
+	if (ft_check_args(argc, argv) == 1)
+		return (0);
+	if (!init_input_struct(&input, argc, argv))
 		return (0);
 	philo = init_philo_struct(&input);
 	if (!philo)
 		return (ft_destroy(&input), 0);
 	if (init_threads(&input, philo))
 		return (0);
-	return (ft_destroy(&input), free(philo), 0); 
+	return (ft_destroy(&input), free(philo), 0);
 }

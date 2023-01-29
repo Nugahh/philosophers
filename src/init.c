@@ -47,13 +47,13 @@ bool	init_mutexes(t_input *input)
 			return (0);
 		i++;
 	}
-	if (pthread_mutex_init(input->print, NULL))
+	if (pthread_mutex_init(&input->print, NULL))
 		return (0);
-	if (pthread_mutex_init(input->check_max_meals, NULL))
+	if (pthread_mutex_init(&input->check_max_meals, NULL))
 		return (0);
-	if (pthread_mutex_init(input->check_death, NULL))
+	if (pthread_mutex_init(&input->check_death, NULL))
 		return (0);
-	if (pthread_mutex_init(input->check_latest_meal, NULL))
+	if (pthread_mutex_init(&input->check_latest_meal, NULL))
 		return (0);
 	return (1);
 }
@@ -86,13 +86,13 @@ bool	init_threads(t_input *input, t_philo *philo)
 	while (i < input->total_philo)
 	{
 		if (pthread_create(&philo[i].philo_thread, NULL, \
-		(void *)&ft_routine, &philo + i))
+		(void *)&ft_routine, philo + i))
 			return (0);
 		i++;
 	}
 	i = 0;
-	usleep(100);
-	ft_check_death(philo);
+	usleep(50);
+	ft_death(input, philo);
 	while (i < input->total_philo)
 	{
 		if (pthread_join(philo[i].philo_thread, NULL))

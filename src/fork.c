@@ -6,7 +6,7 @@
 /*   By: fwong <fwong@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 22:31:20 by fwong             #+#    #+#             */
-/*   Updated: 2023/01/29 00:13:26 by fwong            ###   ########.fr       */
+/*   Updated: 2023/01/29 19:06:04 by fwong            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ void	ft_put_fork(t_philo *philo)
 {
 	if (philo->philo_id == 1)
 	{
-		pthread_mutex_unlock(&philo->input->fork[philo->input->total_philo - 1]);
+		pthread_mutex_unlock(&philo->input->fork[\
+		philo->input->total_philo - 1]);
 		pthread_mutex_unlock(&philo->input->fork[philo->philo_id - 1]);
 	}
 	else

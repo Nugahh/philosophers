@@ -37,8 +37,8 @@ all: ${NAME}
 	@@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -o $@ -c $<
 
-${NAME}: ${OBJS} ./libft/libft.a
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB)
+${NAME}: ${OBJS}
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 
 ./libft/libft.a:
 	make $(@F) -C $(@D)
@@ -46,12 +46,10 @@ ${NAME}: ${OBJS} ./libft/libft.a
 clean:
 	rm -rf obj/
 	rm -f ${OBJS}
-	make $@ -C ./libft/
 
 fclean: 
 	rm -rf obj/
 	rm -f ${NAME}
-	make $@ -C libft
 
 re:	fclean all
 
